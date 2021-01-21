@@ -19,22 +19,27 @@ var leaderRouter = require('./routes/leaderRouter');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 const mongoose = require('mongoose');
-
-
-const Dishes = require('./models/dishes');
-
+const uploadRouter = require('./routes/uploadRouter');
 const connect = mongoose.connect(url);
 
 connect.then((db) => {
   console.log("Connected correctly to server");
 }, (err) => { console.log(err); });
-
+app.all('*', (req, res, next) => {
+  if (req.secure) {
+    return next();
+  }
+  else {
+    res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+  }
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
   name: 'session-id',
@@ -46,18 +51,18 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-function auth (req, res, next) {
-  console.log(req.user);
+// function auth (req, res, next) {
+//   console.log(req.user);
 
-  if (!req.user) {
-    var err = new Error('You are not authenticated!');
-    err.status = 403;
-    next(err);
-  }
-  else {
-        next();
-  }
-}
+//   if (!req.user) {
+//     var err = new Error('You are not authenticated!');
+//     err.status = 403;
+//     next(err);
+//   }
+//   else {
+//         next();
+//   }
+// }
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
@@ -65,6 +70,7 @@ app.use('/users', usersRouter);
 app.use('/dishes', dishRouter);
 app.use('/promotions', promoRouter);
 app.use('/leaders', leaderRouter);
+app.use('/imageUpload',uploadRouter);
 
 
 
