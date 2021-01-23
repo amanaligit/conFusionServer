@@ -7,6 +7,7 @@ var config = require('./config');
 const url = config.mongoUrl;
 
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var passport = require('passport');
@@ -16,10 +17,12 @@ var app = express();
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
+var commentRouter = require('./routes/commentRouter');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 const mongoose = require('mongoose');
 const uploadRouter = require('./routes/uploadRouter');
+const favRouter = require('./routes/favouriteRouter');
 const connect = mongoose.connect(url);
 
 connect.then((db) => {
@@ -39,6 +42,7 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
@@ -65,12 +69,18 @@ app.use(passport.session());
 // }
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+
 app.use('/users', usersRouter);
 app.use('/dishes', dishRouter);
 app.use('/promotions', promoRouter);
 app.use('/leaders', leaderRouter);
 app.use('/imageUpload',uploadRouter);
+app.use('/favorites',favRouter);
+app.use('/comments',commentRouter);
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 
 
