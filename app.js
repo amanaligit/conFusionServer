@@ -23,11 +23,16 @@ var FileStore = require('session-file-store')(session);
 const mongoose = require('mongoose');
 const uploadRouter = require('./routes/uploadRouter');
 const favRouter = require('./routes/favouriteRouter');
-const connect = mongoose.connect(url);
+var connectWithRetry = function() {
+  return mongoose.connect(url, function(err) {
+    if (err) {
+      console.error('Failed to connect to mongo on startup - retrying in 5 sec');
+      setTimeout(connectWithRetry, 5000);
+    }
+  });
+};
+connectWithRetry();
 
-connect.then((db) => {
-  console.log("Connected correctly to server");
-}, (err) => { console.log(err); });
 app.all('*', (req, res, next) => {
   if (req.secure) {
     return next();

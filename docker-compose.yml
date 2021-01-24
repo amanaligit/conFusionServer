@@ -11,9 +11,6 @@ services:
   mongo:
     image : mongo:latest
     container_name: mongo
-    environment:
-      - PUID=1000
-      - PGID=1000
     volumes:
        - ./database:/data/db
     ports:
