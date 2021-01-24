@@ -1,7 +1,8 @@
 # conFusionServer
 
-This is a project developed for a Restaurant to present Dishes with user and admin login  using a React and Redux, Node-Express and MongoDB. To run, just run "npm install" or "yarn install --ignore-engines" to install the dependencies. Then run "npm start" or
-"yarn start" to start the project on localhost:3000. Visit this url in your web browser to access the React GUI.
+This is a project developed for a Restaurant to present Dishes with user and admin login  using a React and Redux, Node-Express and MongoDB. 
+
+Running: run "docker compose up" to run using docker containers.
 
 Functions:
 1. Login, Register using JWT Tokens over https.
