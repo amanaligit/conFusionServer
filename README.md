@@ -1,8 +1,8 @@
 # conFusionServer
 
-This is a project developed for a Restaurant to present Dishes with user and admin login  using a React and Redux, Node-Express and MongoDB. 
+This is a project developed for a Restaurant to present Dishes with user and admin login  using React and Redux for frontend, Node-Express and MongoDB. 
 
-Running: run "docker compose up" to run using docker containers.
+Running: run "docker-compose up" to run using docker containers.
 
 Functions:
 1. Login, Register using JWT Tokens over https.
